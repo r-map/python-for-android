@@ -1,14 +1,25 @@
 #!/bin/bash
 
-VERSION_django=${VERSION_django:-1.6.1}
+VERSION_django=${VERSION_django:-1.10.5}
 DEPS_django=(sqlite3 python)
 URL_django=https://pypi.python.org/packages/source/D/Django/Django-$VERSION_django.tar.gz
-MD5_django=3ea7a00ea9e7a014e8a4067dd6466a1b
+#MD5_django=3ea7a00ea9e7a014e8a4067dd6466a1b
 BUILD_django=$BUILD_PATH/django/$(get_directory $URL_django)
 RECIPE_django=$RECIPES_PATH/django
 
 function prebuild_django() {
-	true
+
+    cd $BUILD_django
+
+    # check marker in our source build
+    if [ -f .patched ]; then
+	# no patch needed
+	return
+    fi
+
+    try patch -p1 < $RECIPE_django/migration.patch
+
+    true
 }
 
 function shouldbuild_django() {
