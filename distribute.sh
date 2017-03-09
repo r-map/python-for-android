@@ -31,7 +31,7 @@ if [ "X$VIRTUALENV_NAME" == "X" ]; then
 fi
 
 # Resolve Cython path
-CYTHON="$(which cython2)"
+CYTHON="$(which cython)"
 if [ "X$CYTHON" == "X" ]; then
         CYTHON="$(which cython)"
 fi
@@ -192,7 +192,7 @@ function push_arm() {
     elif  [ "X${ANDROIDNDKVER:0:2}" == "Xr9" ]; then
         export TOOLCHAIN_PREFIX=arm-linux-androideabi
         export TOOLCHAIN_VERSION=4.8
-    elif [ "X${ANDROIDNDKVER:0:3}" == "Xr10" ]; then
+    elif [ "X${ANDROIDNDKVER:0:3}" == "Xr13" ]; then
         export TOOLCHAIN_PREFIX=arm-linux-androideabi
         export TOOLCHAIN_VERSION=4.9
     else
