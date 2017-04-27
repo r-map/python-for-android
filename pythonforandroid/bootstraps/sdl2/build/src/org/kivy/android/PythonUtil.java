@@ -7,30 +7,18 @@ import java.util.ArrayList;
 import java.io.FilenameFilter;
 
 public class PythonUtil {
-    private static final String TAG = "PythonUtil";
+	private static final String TAG = "PythonUtil";
 
-    protected static ArrayList<String> getLibraries(File filesDir) {
-
-        ArrayList<String> MyList = new ArrayList<String>();
-        MyList.add("SDL2");
-        MyList.add("SDL2_image");
-        MyList.add("SDL2_mixer");
-        MyList.add("SDL2_ttf");
-
-        String absPath = filesDir.getParentFile().getParentFile().getAbsolutePath() + "/lib/";
-        filesDir = new File(absPath);
-        File [] files = filesDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return  name.matches(".*ssl.*") || name.matches(".*crypto.*");
-            }
-        });
-
-        for (int i = 0; i < files.length; ++i) {
-            File mfl = files[i];
-            String name = mfl.getName();
-            name = name.substring(3, name.length() - 3);
-            MyList.add(name);
+	protected static String[] getLibraries() {
+        return new String[] {
+            "SDL2",
+            "SDL2_image",
+            "SDL2_mixer",
+            "SDL2_ttf",
+            "python2.7",
+            "python3.5m",
+            "python3.6m",
+            "main"
         };
 
         MyList.add("python2.7");
@@ -42,17 +30,22 @@ public class PythonUtil {
     public static void loadLibraries(File filesDir) {
 
         String filesDirPath = filesDir.getAbsolutePath();
-        boolean skippedPython = false;
+        boolean foundPython = false;
 
         for (String lib : getLibraries(filesDir)) {
             try {
                 System.loadLibrary(lib);
-            } catch(UnsatisfiedLinkError e) {
-                if (lib.startsWith("python") && !skippedPython) {
-                    skippedPython = true;
-                    continue;
+                if (lib.startsWith("python")) {
+                    foundPython = true;
                 }
-                throw e;
+            } catch(UnsatisfiedLinkError e) {
+                // If this is the last possible libpython
+                // load, and it has failed, give a more
+                // general error
+                if (lib.startsWith("python3.6") && !foundPython) {
+                    throw new java.lang.RuntimeException("Could not load any libpythonXXX.so");
+                }
+                continue;
             }
         }
 
