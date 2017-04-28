@@ -3,8 +3,7 @@ package org.kivy.android;
 import java.io.File;
 
 import android.util.Log;
-import java.util.ArrayList;
-import java.io.FilenameFilter;
+
 
 public class PythonUtil {
 	private static final String TAG = "PythonUtil";
@@ -15,38 +14,36 @@ public class PythonUtil {
             "SDL2_image",
             "SDL2_mixer",
             "SDL2_ttf",
+	    "crypto1.0.2h",
+	    "ssl1.0.2h",
+	    "sqlite3",	    
             "python2.7",
             "python3.5m",
             "python3.6m",
             "main"
         };
-
-        MyList.add("python2.7");
-        MyList.add("python3.5m");
-        MyList.add("main");
-        return MyList;
     }
 
-    public static void loadLibraries(File filesDir) {
+	public static void loadLibraries(File filesDir) {
 
         String filesDirPath = filesDir.getAbsolutePath();
         boolean foundPython = false;
 
-        for (String lib : getLibraries(filesDir)) {
-            try {
+	for (String lib : getLibraries()) {
+		    //try {
                 System.loadLibrary(lib);
-                if (lib.startsWith("python")) {
-                    foundPython = true;
-                }
-            } catch(UnsatisfiedLinkError e) {
-                // If this is the last possible libpython
-                // load, and it has failed, give a more
-                // general error
-                if (lib.startsWith("python3.6") && !foundPython) {
-                    throw new java.lang.RuntimeException("Could not load any libpythonXXX.so");
-                }
-                continue;
-            }
+                //if (lib.startsWith("python")) {
+                //    foundPython = true;
+                //}
+            //} catch(UnsatisfiedLinkError e) {
+                //// If this is the last possible libpython
+                //// load, and it has failed, give a more
+                //// general error
+                //if (lib.startsWith("python3.6") && !foundPython) {
+                //    throw new java.lang.RuntimeException("Could not load any libpythonXXX.so");
+                //}
+                //continue;
+            //}
         }
 
         try {
