@@ -56,7 +56,7 @@ encodings/hz*
 
 # unused python modules
 bsddb/*
-wsgiref/*
+#wsgiref/*
 hotshot/*
 pydoc_data/*
 tty.pyo
